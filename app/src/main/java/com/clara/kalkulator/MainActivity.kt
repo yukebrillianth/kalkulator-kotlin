@@ -1,77 +1,71 @@
 package com.clara.kalkulator
 
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.clara.kalkulator.ui.theme.ColorSparkBlue
-import com.clara.kalkulator.ui.theme.KalkulatorTheme
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var tvEkspresi: TextView
+    private lateinit var tvHasil: TextView
+
+    private var tampilan = "0"
+    private var angkaPertama = 0.0
+    private var operator = ""
+    private var mulaiAngkaBaru = true
+    private var ekspresi = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            KalkulatorTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {
-                    innerPadding -> LayarKalkulator(modifier = Modifier.padding(innerPadding))
-                }
-            }
-        }
+        setContentView(R.layout.activity_main)
+
+        tvEkspresi = findViewById(R.id.tvEkspresi)
+        tvHasil = findViewById(R.id.tvHasil)
+        updateTampilan()
     }
-}
 
-@Composable
-fun LayarKalkulator(modifier: Modifier = Modifier) {
+    // Satu handler untuk SEMUA tombol via android:onClick di XML
+    fun onButtonClick(view: View) {
+        val tag = view.tag?.toString() ?: return
 
-    var tampilan by remember { mutableStateOf("0") }
-    var angkaPertama by remember { mutableStateOf(0.0) }
-    var operator by remember { mutableStateOf("") }
-    var mulaiAngkaBaru by remember { mutableStateOf(true) }
-
-    fun tekanAngka(angka: String) {
-        tampilan = if (mulaiAngkaBaru || tampilan == "0") {
-            angka
-        } else {
-            tampilan + angka
+        when (tag) {
+            "0","1","2","3","4","5","6","7","8","9" -> tekanAngka(tag)
+            "." -> tekanTitik()
+            "+","-","x",":" -> tekanOperator(tag)
+            "=" -> tekanSamaDengan()
+            "C" -> tekanClear()
+            "+/-" -> tekanUbahTanda()
+            "%" -> tekanPersen()
         }
+        updateTampilan()
+    }
+
+    private fun tekanAngka(angka: String) {
+        tampilan = if (mulaiAngkaBaru || tampilan == "0") angka else tampilan + angka
         mulaiAngkaBaru = false
+        updateEkspresiBerjalan()
     }
 
-    fun tekanOperator(op: String) {
+    private fun tekanTitik() {
+        if (mulaiAngkaBaru) {
+            tampilan = "0."
+            mulaiAngkaBaru = false
+        } else if (!tampilan.contains(".")) {
+            tampilan += "."
+        }
+        updateEkspresiBerjalan()
+    }
+
+    private fun tekanOperator(op: String) {
         angkaPertama = tampilan.toDoubleOrNull() ?: 0.0
         operator = op
         mulaiAngkaBaru = true
+        ekspresi = "${formatAngka(angkaPertama)} $operator"
     }
 
-    fun tekanSamaDengan() {
+    private fun tekanSamaDengan() {
         val angkaKedua = tampilan.toDoubleOrNull() ?: 0.0
-
         val hasil = when (operator) {
             "+" -> angkaPertama + angkaKedua
             "-" -> angkaPertama - angkaKedua
@@ -79,106 +73,47 @@ fun LayarKalkulator(modifier: Modifier = Modifier) {
             ":" -> if (angkaKedua == 0.0) Double.NaN else angkaPertama / angkaKedua
             else -> angkaKedua
         }
-
+        ekspresi = if (operator.isNotEmpty())
+            "${formatAngka(angkaPertama)} $operator ${formatAngka(angkaKedua)} =" else ""
         tampilan = formatAngka(hasil)
         operator = ""
+        angkaPertama = hasil
         mulaiAngkaBaru = true
     }
 
-    fun tekanClear() {
+    private fun tekanClear() {
         tampilan = "0"
         angkaPertama = 0.0
         operator = ""
+        ekspresi = ""
         mulaiAngkaBaru = true
     }
 
-//    Container
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-
-        Text(
-            text = "Kalkulator OK",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            fontStyle = FontStyle.Italic,
-            textDecoration = TextDecoration.Underline
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp),
-            contentAlignment = Alignment.BottomEnd
-        ) {
-            Text(
-                text = tampilan,
-                fontSize = 48.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.End,
-                color = ColorSparkBlue
-            )
-        }
-
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Tombol("7", Modifier.weight(1f)) { tekanAngka("7") }
-            Tombol("8", Modifier.weight(1f)) { tekanAngka("8") }
-            Tombol("9", Modifier.weight(1f)) { tekanAngka("9") }
-            Tombol(":", Modifier.weight(1f)) { tekanOperator(":") }
-        }
-
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Tombol("4", Modifier.weight(1f)) { tekanAngka("4") }
-            Tombol("5", Modifier.weight(1f)) { tekanAngka("5") }
-            Tombol("6", Modifier.weight(1f)) { tekanAngka("6") }
-            Tombol("x", Modifier.weight(1f)) { tekanOperator("x") }
-        }
-
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Tombol("1", Modifier.weight(1f)) { tekanAngka("1") }
-            Tombol("2", Modifier.weight(1f)) { tekanAngka("2") }
-            Tombol("3", Modifier.weight(1f)) { tekanAngka("3") }
-            Tombol("-", Modifier.weight(1f)) { tekanOperator("-") }
-        }
-
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Tombol("C", Modifier.weight(1f)) { tekanClear() }
-            Tombol("0", Modifier.weight(1f)) { tekanAngka("0") }
-            Tombol("=", Modifier.weight(1f)) { tekanSamaDengan() }
-            Tombol("+", Modifier.weight(1f)) { tekanOperator("+") }
-        }
+    private fun tekanUbahTanda() {
+        val nilai = tampilan.toDoubleOrNull() ?: 0.0
+        tampilan = formatAngka(nilai * -1)
     }
-}
 
-@Composable
-fun Tombol(teks: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        modifier = modifier
-            .padding(vertical = 4.dp)
-            .height(64.dp)
-    ) {
-        Text(text = teks, fontSize = 20.sp)
+    private fun tekanPersen() {
+        val nilai = tampilan.toDoubleOrNull() ?: 0.0
+        tampilan = formatAngka(nilai / 100)
     }
-}
 
-fun formatAngka(nilai: Double): String {
-    if (nilai.isNaN()) {
-        return "Error"
+    private fun updateEkspresiBerjalan() {
+        ekspresi = if (operator.isNotEmpty()) "${formatAngka(angkaPertama)} $operator" else ""
     }
-    return if (nilai == nilai.toLong().toDouble()) {
-        nilai.toLong().toString()
-    } else {
-        nilai.toString()
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun LayarKalkulatorPreview() {
-    KalkulatorTheme {
-        LayarKalkulator()
+    private fun updateTampilan() {
+        tvHasil.text = tampilan
+        tvEkspresi.text = ekspresi
+    }
+
+    private fun formatAngka(nilai: Double): String {
+        if (nilai.isNaN()) return "Error"
+        return if (nilai == nilai.toLong().toDouble()) {
+            nilai.toLong().toString()
+        } else {
+            nilai.toString()
+        }
     }
 }

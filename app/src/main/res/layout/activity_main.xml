@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E7E4F6"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tvJudul"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:text="Simple Calculator hehe ^^"
+        android:textColor="#3F3A5C"
+        android:textSize="18sp"
+        android:textStyle="bold|italic" />
+
+    <LinearLayout
+        android:id="@+id/displayCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvJudul"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="vertical"
+        android:background="@drawable/bg_display_card"
+        android:elevation="6dp"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tvEkspresi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textColor="#9691B3"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvHasil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="end"
+            android:textColor="#3F3A5C"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:text="0" />
+
+    </LinearLayout>
+
+    <!-- Baris 1: C  +/-  %  : -->
+    <Button android:id="@+id/btnClear"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/displayCard"
+        android:background="@drawable/bg_tombol_hapus"
+        android:textColor="#FFFFFF" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="C" android:tag="C" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btnToggleSign"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/displayCard"
+        android:layout_toEndOf="@id/btnClear" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="+/-" android:tag="+/-" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btnPercent"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/displayCard"
+        android:layout_toEndOf="@id/btnToggleSign" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="%" android:tag="%" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btnDivide"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/displayCard"
+        android:layout_toEndOf="@id/btnPercent" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text=":" android:tag=":" android:onClick="onButtonClick" />
+
+    <!-- Baris 2: 7 8 9 x -->
+    <Button android:id="@+id/btn7"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btnClear" android:layout_marginTop="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="7" android:tag="7" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btn8"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btnToggleSign" android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/btn7" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="8" android:tag="8" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btn9"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btnPercent" android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/btn8" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="9" android:tag="9" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btnMultiply"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btnDivide" android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/btn9" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="x" android:tag="x" android:onClick="onButtonClick" />
+
+    <!-- Baris 3: 4 5 6 - -->
+    <Button android:id="@+id/btn4"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btn7" android:layout_marginTop="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="4" android:tag="4" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btn5"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btn8" android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/btn4" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="5" android:tag="5" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btn6"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btn9" android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/btn5" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="6" android:tag="6" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btnSubtract"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btnMultiply" android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/btn6" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="-" android:tag="-" android:onClick="onButtonClick" />
+
+    <!-- Baris 4: 1 2 3 + -->
+    <Button android:id="@+id/btn1"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btn4" android:layout_marginTop="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="1" android:tag="1" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btn2"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btn5" android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/btn1" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="2" android:tag="2" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btn3"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btn6" android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/btn2" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="3" android:tag="3" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btnAdd"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btnSubtract" android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/btn3" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="+" android:tag="+" android:onClick="onButtonClick" />
+
+    <!-- Baris 5: 0 (lebar 2x) . = -->
+    <Button android:id="@+id/btn0"
+        android:layout_width="152dp" android:layout_height="72dp"
+        android:layout_below="@id/btn1" android:layout_marginTop="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:gravity="center_vertical|start" android:paddingStart="28dp"
+        android:text="0" android:tag="0" android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btnDot"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btn3" android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/btn0" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_angka"
+        android:textColor="#4A4468" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="." android:tag="." android:onClick="onButtonClick" />
+
+    <Button android:id="@+id/btnEquals"
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:layout_below="@id/btnAdd" android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/btnDot" android:layout_marginStart="8dp"
+        android:background="@drawable/bg_tombol_sama"
+        android:textColor="#FFFFFF" android:textAllCaps="false"
+        android:textSize="24sp"
+        android:text="=" android:tag="=" android:onClick="onButtonClick" />
+
+</RelativeLayout>
